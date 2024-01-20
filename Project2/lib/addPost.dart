@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-int userID = 1;
-
 class AddPostPage extends StatefulWidget {
+  final int userID;
+
+  AddPostPage({required this.userID});
+
   @override
   _AddPostPageState createState() => _AddPostPageState();
 }
@@ -22,7 +24,7 @@ class _AddPostPageState extends State<AddPostPage> {
     Map<String, dynamic> postData = {
       'title': title,
       'content': content,
-      'userId': userID,
+      'userId': widget.userID, // Access userID through widget
     };
 
     String jsonBody = json.encode(postData);
