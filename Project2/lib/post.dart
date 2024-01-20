@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'profile.dart';
+import 'login.dart';
 
 class ApiConstants {
   static const String apiUrl =
@@ -42,7 +43,7 @@ class _DarkPostState extends State<DarkPost> {
     );
 
     if (confirmDelete == true) {
-      print('Deletig post of id = $postId');
+      print('Deleting post of id = $postId');
       final response = await http.post(Uri.parse(ApiConstants.apiUrl),
           body: {"pid": postId.toString()});
       if (response.statusCode == 200) {
@@ -58,6 +59,11 @@ class _DarkPostState extends State<DarkPost> {
   Widget build(BuildContext context) {
     final Map<String, dynamic> PostData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    // Obtain user information from the context
+    User? user = ModalRoute.of(context)!.settings.arguments as User?;
+    int userID = user?.user_id ?? 0;
+
     int postId = PostData["pid"];
     String title = PostData['title'];
     String content = PostData['content'];
