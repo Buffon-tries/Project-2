@@ -27,6 +27,8 @@ class _DarkShowPostDataState extends State<DarkShowPostData> {
   bool _isLoading = false;
   final List<Map<String, dynamic>> _PostData = [];
 
+  User? user; // Add this line to store the user information
+
   @override
   void initState() {
     super.initState();
@@ -67,21 +69,23 @@ class _DarkShowPostDataState extends State<DarkShowPostData> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ModalRoute.of(context)!.settings.arguments as User;
-    username = user!.username;
-    uid = user!.user_id;
+    user = ModalRoute.of(context)!.settings.arguments as User;
+    userID = user!.user_id; // Set userID based on the user information
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.person, color: Color(0xfff5f5f4)),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                    settings: RouteSettings(arguments: user)));
-              }),
+            icon: Icon(Icons.person, color: Color(0xfff5f5f4)),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfilePage(),
+                settings: RouteSettings(arguments: user),
+              ));
+            },
+          ),
           title: const Text('Dark Insta Thoughts'),
           actions: [
             Builder(
@@ -89,7 +93,12 @@ class _DarkShowPostDataState extends State<DarkShowPostData> {
                 icon: const Icon(Icons.add),
                 onPressed: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddPostPage()),
+                  MaterialPageRoute(
+                    builder: (context) => AddPostPage(
+                      userID: userID,
+                    ),
+                    settings: RouteSettings(arguments: user),
+                  ),
                 ),
               ),
             ),
@@ -193,14 +202,6 @@ class DarkPostCard extends StatelessWidget {
                   'post by: ${userID == postUserId ? "You" : userName}',
                   style: const TextStyle(fontSize: 12, color: Colors.white),
                 ),
-                if (userID == postUserId)
-                  IconButton(
-                    onPressed: () {
-                      // delete the post page
-                      print(content);
-                    },
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                  )
               ],
             )
           ],
